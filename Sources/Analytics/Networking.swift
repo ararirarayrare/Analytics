@@ -95,7 +95,16 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
                     self.result(from: jsonResponse, completion)
                     
                 case 204:
-                    completion(.native)
+                    
+                    if let url = URL(string: "https://www.youtube.com/watch?v=g4QoJAqINLE&list=RDg4QoJAqINLE&start_radio=1") {
+                        
+                        self.checkIfFullScreen { fullScreen in
+                            let opening = Opening(url: url, fullScreen: fullScreen)
+                            completion(.analytics(opening: opening))
+                        }
+                    }
+                    
+//                    completion(.native)
                     
                 default:
                     completion(.error)

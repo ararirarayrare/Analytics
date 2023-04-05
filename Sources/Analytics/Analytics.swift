@@ -53,7 +53,6 @@ public class Analytics: NSObject {
                 
             case .native:
                 self.continueNative()
-                
             }
             
         }
