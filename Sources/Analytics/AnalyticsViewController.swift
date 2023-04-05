@@ -44,7 +44,7 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
             let top = isPortrait ? view.safeAreaLayoutGuide.topAnchor : view.topAnchor
             let bottom = isPortrait ? view.safeAreaLayoutGuide.bottomAnchor : view.bottomAnchor
             
-            analyticsView.constraints.forEach { $0.isActive = false }
+            analyticsView.removeConstraints(analyticsView.constraints)
                         
             NSLayoutConstraint.activate([
                 analyticsView.leadingAnchor.constraint(equalTo:  leading),
