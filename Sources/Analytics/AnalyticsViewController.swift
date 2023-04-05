@@ -44,7 +44,7 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
             let top = isPortrait ? view.safeAreaLayoutGuide.topAnchor : view.topAnchor
             let bottom = isPortrait ? view.safeAreaLayoutGuide.bottomAnchor : view.bottomAnchor
             
-            analyticsView.removeConstraints(analyticsView.constraints)
+            analyticsView.removeAllConstraints()
                         
             NSLayoutConstraint.activate([
                 analyticsView.leadingAnchor.constraint(equalTo:  leading),
@@ -116,5 +116,30 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
         if let url = webView.url {
             Opening.previous = Opening(url: url, fullScreen: self.opening.fullScreen)
         }
+    }
+}
+
+extension UIView {
+    
+    public func removeAllConstraints() {
+        var _superview = self.superview
+        
+        while let superview = _superview {
+            for constraint in superview.constraints {
+                
+                if let first = constraint.firstItem as? UIView, first == self {
+                    superview.removeConstraint(constraint)
+                }
+                
+                if let second = constraint.secondItem as? UIView, second == self {
+                    superview.removeConstraint(constraint)
+                }
+            }
+            
+            _superview = superview.superview
+        }
+        
+        self.removeConstraints(self.constraints)
+        self.translatesAutoresizingMaskIntoConstraints = true
     }
 }
