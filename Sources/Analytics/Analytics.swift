@@ -7,27 +7,33 @@ public class Analytics: NSObject {
     private let appID: String
     private let window: UIWindow?
     
-    private var rootViewController: UIViewController?
+//    private var rootViewController: UIViewController?
+    
+    private let setupHandler: () -> Void
     
 
     public init(dateString: String,
                 appID: String,
-                window: UIWindow?) {
+                window: UIWindow?,
+                setupHandler: @escaping () -> Void) {
         self.date = Date()
         self.appID = appID
         self.window = window
-        self.rootViewController = window?.rootViewController
+        self.setupHandler = setupHandler
+//        self.rootViewController = window?.rootViewController
         
     }
     
     @objc
     public init(dateString: NSString,
                 appID: NSString,
-                window: UIWindow?) {
+                window: UIWindow?,
+                setupHandler: @escaping () -> Void) {
         self.date = Date()
         self.appID = appID as String
         self.window = window
-        self.rootViewController = window?.rootViewController
+        self.setupHandler = setupHandler
+//        self.rootViewController = window?.rootViewController
     }
     
     @objc
@@ -59,7 +65,7 @@ public class Analytics: NSObject {
     }
     
     private func continueNative() {
-        
+        setupHandler()
     }
     
     private func openAnalytics(opening: Opening) {
