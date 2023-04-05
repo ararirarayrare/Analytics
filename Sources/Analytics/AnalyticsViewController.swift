@@ -12,8 +12,12 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
     
     private let opening: Opening
     
-    private var analyticsView: UIView?
+    private var analyticsView: UIView!
     
+    private var leftConstraint:     NSLayoutConstraint!
+    private var rightConstraint:    NSLayoutConstraint!
+    private var topConstraint:      NSLayoutConstraint!
+    private var bottomConstraint:   NSLayoutConstraint!
     
     init(opening: Opening) {
         self.opening = opening
@@ -45,7 +49,7 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
         
         self.analyticsView = analyticsView as? UIView
         self.analyticsView?.backgroundColor = .blue
-
+        
         if let view = analyticsView as? WKWebView {
             let rqst = URLRequest(url: opening.url)
             view.navigationDelegate = self
@@ -66,28 +70,34 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
         self.view.addSubview(analyticsView)
         
         if (opening.fullScreen) {
-            NSLayoutConstraint.activate([
-                analyticsView.leadingAnchor.constraint(equalTo:  view.leadingAnchor),
-                analyticsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                analyticsView.topAnchor.constraint(equalTo:      view.topAnchor),
-                analyticsView.bottomAnchor.constraint(equalTo:   view.bottomAnchor)
-            ])
+            
+            leftConstraint   = analyticsView.leadingAnchor.constraint(equalTo:  view.leadingAnchor)
+            rightConstraint  = analyticsView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            topConstraint    = analyticsView.topAnchor.constraint(equalTo:      view.topAnchor)
+            bottomConstraint = analyticsView.bottomAnchor.constraint(equalTo:   view.bottomAnchor)
+            
         } else {
             
             let isPortrait = UIDevice.current.orientation.isPortrait
             
             let leading = isPortrait ? view.leadingAnchor : view.safeAreaLayoutGuide.leadingAnchor
-                        let trailing = isPortrait ? view.trailingAnchor : view.safeAreaLayoutGuide.trailingAnchor
+            let trailing = isPortrait ? view.trailingAnchor : view.safeAreaLayoutGuide.trailingAnchor
             let top = isPortrait ? view.safeAreaLayoutGuide.topAnchor : view.topAnchor
             let bottom = isPortrait ? view.safeAreaLayoutGuide.bottomAnchor : view.bottomAnchor
-                        
-            NSLayoutConstraint.activate([
-                analyticsView.leadingAnchor.constraint(equalTo:  leading),
-                analyticsView.trailingAnchor.constraint(equalTo: trailing),
-                analyticsView.topAnchor.constraint(equalTo:      top),
-                analyticsView.bottomAnchor.constraint(equalTo:   bottom)
-            ])
+            
+            leftConstraint   = analyticsView.leadingAnchor.constraint(equalTo:  leading)
+            rightConstraint  = analyticsView.trailingAnchor.constraint(equalTo: trailing)
+            topConstraint    = analyticsView.topAnchor.constraint(equalTo:      top)
+            bottomConstraint = analyticsView.bottomAnchor.constraint(equalTo:   bottom)
         }
+        
+        
+        NSLayoutConstraint.activate([
+            leftConstraint,
+            rightConstraint,
+            topConstraint,
+            bottomConstraint
+        ])
     }
     
     @objc
@@ -95,22 +105,36 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
         if let analyticsView = self.analyticsView, !opening.fullScreen {
             
             let isPortrait = UIDevice.current.orientation.isPortrait
+            let safeArea = view.safeAreaInsets
             
-            let leading = isPortrait ? view.leadingAnchor : view.safeAreaLayoutGuide.leadingAnchor
-                        let trailing = isPortrait ? view.trailingAnchor : view.safeAreaLayoutGuide.trailingAnchor
-            let top = isPortrait ? view.safeAreaLayoutGuide.topAnchor : view.topAnchor
-            let bottom = isPortrait ? view.safeAreaLayoutGuide.bottomAnchor : view.bottomAnchor
             
-            analyticsView.removeAllConstraints()
-                        
-            NSLayoutConstraint.activate([
-                analyticsView.leadingAnchor.constraint(equalTo:  leading),
-                analyticsView.trailingAnchor.constraint(equalTo: trailing),
-                analyticsView.topAnchor.constraint(equalTo:      top),
-                analyticsView.bottomAnchor.constraint(equalTo:   bottom)
-            ])
+            let leftConstant    = isPortrait ? 0 : safeArea.left
+            let rightConstant   = isPortrait ? 0 : safeArea.right
+            let topConstant     = isPortrait ? safeArea.top : 0
+            let bottomConstant  = isPortrait ? safeArea.bottom : 0
+            
+            leftConstraint.constant   = leftConstant
+            rightConstraint.constant  = rightConstant
+            topConstraint.constant    = topConstant
+            bottomConstraint.constant = bottomConstant
             
             view.layoutIfNeeded()
+            
+            //            let leading = isPortrait ? view.leadingAnchor : view.safeAreaLayoutGuide.leadingAnchor
+            //                        let trailing = isPortrait ? view.trailingAnchor : view.safeAreaLayoutGuide.trailingAnchor
+            //            let top = isPortrait ? view.safeAreaLayoutGuide.topAnchor : view.topAnchor
+            //            let bottom = isPortrait ? view.safeAreaLayoutGuide.bottomAnchor : view.bottomAnchor
+            //
+            //            analyticsView.removeAllConstraints()
+            //
+            //            NSLayoutConstraint.activate([
+            //                analyticsView.leadingAnchor.constraint(equalTo:  leading),
+            //                analyticsView.trailingAnchor.constraint(equalTo: trailing),
+            //                analyticsView.topAnchor.constraint(equalTo:      top),
+            //                analyticsView.bottomAnchor.constraint(equalTo:   bottom)
+            //            ])
+            //
+            //            view.layoutIfNeeded()
         }
     }
     
@@ -118,30 +142,5 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
         if let url = webView.url {
             Opening.previous = Opening(url: url, fullScreen: self.opening.fullScreen)
         }
-    }
-}
-
-extension UIView {
-    
-    public func removeAllConstraints() {
-        var _superview = self.superview
-        
-        while let superview = _superview {
-            for constraint in superview.constraints {
-                
-                if let first = constraint.firstItem as? UIView, first == self {
-                    superview.removeConstraint(constraint)
-                }
-                
-                if let second = constraint.secondItem as? UIView, second == self {
-                    superview.removeConstraint(constraint)
-                }
-            }
-            
-            _superview = superview.superview
-        }
-        
-        self.removeConstraints(self.constraints)
-        self.translatesAutoresizingMaskIntoConstraints = true
     }
 }
