@@ -60,7 +60,7 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
         analyticsView.translatesAutoresizingMaskIntoConstraints = false
         
         self.view.addSubview(analyticsView)
-        
+                
         if (opening.fullScreen) {
             
             NSLayoutConstraint.activate([

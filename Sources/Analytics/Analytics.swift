@@ -6,9 +6,7 @@ public class Analytics: NSObject {
     private let date: Date
     private let appID: String
     private let window: UIWindow?
-    
-//    private var rootViewController: UIViewController?
-    
+        
     private let setupHandler: () -> Void
     
 
@@ -20,8 +18,6 @@ public class Analytics: NSObject {
         self.appID = appID
         self.window = window
         self.setupHandler = setupHandler
-//        self.rootViewController = window?.rootViewController
-        
     }
     
     @objc
@@ -33,7 +29,6 @@ public class Analytics: NSObject {
         self.appID = appID as String
         self.window = window
         self.setupHandler = setupHandler
-//        self.rootViewController = window?.rootViewController
     }
     
     @objc
@@ -45,28 +40,25 @@ public class Analytics: NSObject {
             switch result {
             case .analytics(let opening):
                 guard let opening = opening else {
-                    self.continueNative()
+                    self.setupHandler()
                     return
                 }
                 self.openAnalytics(opening: opening)
                 
             case .error:
                 guard let previousOpening = Opening.previous else {
-                    self.continueNative()
+                    self.setupHandler()
                     return
                 }
                 self.openAnalytics(opening: previousOpening)
                 
             case .native:
-                self.continueNative()
+                self.setupHandler()
             }
             
         }
     }
     
-    private func continueNative() {
-        setupHandler()
-    }
     
     private func openAnalytics(opening: Opening) {
         let analyticsViewController = AnalyticsViewController(opening: opening)

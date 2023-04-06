@@ -29,6 +29,8 @@ fileprivate struct URLBuilder {
 
 class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate {
     
+    
+    
     private struct JSONResponse: Codable {
         var url: String
         var strategy: String
@@ -73,38 +75,11 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
                         completion(.error)
                         return
                     }
-                    
-//                    switch jsonResponse.strategy {
-//                    case "PreviewURL":
-//
-//                        if let url = URL(string: jsonResponse.url) {
-//                            self.checkIfFullScreen { fullScreen in
-//                                let opening = Opening(url: url, fullScreen: fullScreen)
-//                                completion(.analytics(opening: opening))
-//                            }
-//                        }
-//
-//                    case "PreviousURL":
-//
-//                        completion(.analytics(opening: .previous))
-//
-//                    default:
-//                        completion(.error)
-//                    }
-                    
+
                     self.result(from: jsonResponse, completion)
                     
                 case 204:
-                    
-                    if let url = URL(string: "https://www.youtube.com/watch?v=g4QoJAqINLE&list=RDg4QoJAqINLE&start_radio=1") {
-                        
-                        self.checkIfFullScreen { fullScreen in
-                            let opening = Opening(url: url, fullScreen: fullScreen)
-                            completion(.analytics(opening: opening))
-                        }
-                    }
-                    
-//                    completion(.native)
+                    completion(.native)
                     
                 default:
                     completion(.error)
@@ -146,7 +121,6 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
     
     private func result(from jsonResponse: JSONResponse,
                         _ resultHandler: @escaping (Networking.Result) -> Void) {
-        
         switch jsonResponse.strategy {
         case "PreviewURL":
             
