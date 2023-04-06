@@ -26,7 +26,6 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .yellow
         setup()
         layout()
     }
