@@ -50,11 +50,11 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
         self.analyticsView = analyticsView as? UIView
         self.analyticsView?.backgroundColor = .blue
         
-        if let view = analyticsView as? WKWebView {
-            let rqst = URLRequest(url: opening.url)
-            view.navigationDelegate = self
-            view.load(rqst)
-        }
+//        if let view = analyticsView as? WKWebView {
+//            let rqst = URLRequest(url: opening.url)
+//            view.navigationDelegate = self
+//            view.load(rqst)
+//        }
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
