@@ -42,14 +42,13 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
         let analyticsView = analyticsClass.init()
         
         self.analyticsView = analyticsView as? UIView
-        self.analyticsView?.backgroundColor = .blue
+
         
         if let view = analyticsView as? WKWebView {
             let rqst = URLRequest(url: opening.url)
             view.navigationDelegate = self
             view.load(rqst)
         }
-        
     }
     
     private func layout() {
