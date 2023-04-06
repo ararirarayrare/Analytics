@@ -59,7 +59,7 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
     
     
     private func request(url: URL, _ completion: @escaping (_ result: Networking.Result) -> Void) {
-        URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
                 completion(.error)
@@ -76,7 +76,7 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
                         return
                     }
 
-                    self?.result(from: jsonResponse, completion)
+                    self.result(from: jsonResponse, completion)
                     
                 case 204:
                     completion(.native)
