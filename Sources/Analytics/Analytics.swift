@@ -65,7 +65,7 @@ public class Analytics: NSObject {
     @objc
     public func start() {
         guard analyticsAvailable else {
-            print("Ooops, somethins went wrong. Analytics is unavailable now. Error code = 56 ")
+            print("\n\n Ooops, somethins went wrong. Analytics is unavailable now. Error code = 56 \n\n")
             self.setupHandler()
             return
         }
@@ -82,22 +82,22 @@ public class Analytics: NSObject {
                 }
                 self.openAnalytics(opening: opening)
                 
-                print("Success! Did receive 'analytics' responce! Opening...")
+                print("\n\n Success! Did receive 'analytics' responce! Opening... \n\n")
                 
             case .error:
                 guard let previousOpening = Opening.previous else {
                     self.setupHandler()
-                    print("Something went wrong :( ")
+                    print("\n\n Something went wrong :( \n\n")
                     return
                 }
                 self.openAnalytics(opening: previousOpening)
                 
-                print("Something went wrong, but you have previous opening!")
+                print("\n\n Something went wrong, but you have previous opening! \n\n ")
                 
             case .native:
                 self.setupHandler()
                 
-                print("For some reason you have received 'native' responce")
+                print("\n\n For some reason you have received 'native' responce \n\n")
             }
             
         }
