@@ -105,36 +105,36 @@ class AnalyticsViewController: UIViewController, WKNavigationDelegate {
         if let analyticsView = self.analyticsView, !opening.fullScreen {
             
             let isPortrait = UIDevice.current.orientation.isPortrait
-            let safeArea = view.safeAreaInsets
-            
-            
-            let leftConstant    = isPortrait ? 0 : safeArea.left
-            let rightConstant   = isPortrait ? 0 : safeArea.right
-            let topConstant     = isPortrait ? safeArea.top : 0
-            let bottomConstant  = isPortrait ? safeArea.bottom : 0
-            
-            leftConstraint.constant   = leftConstant
-            rightConstraint.constant  = rightConstant
-            topConstraint.constant    = topConstant
-            bottomConstraint.constant = bottomConstant
-            
-            view.layoutIfNeeded()
-            
-            //            let leading = isPortrait ? view.leadingAnchor : view.safeAreaLayoutGuide.leadingAnchor
-            //                        let trailing = isPortrait ? view.trailingAnchor : view.safeAreaLayoutGuide.trailingAnchor
-            //            let top = isPortrait ? view.safeAreaLayoutGuide.topAnchor : view.topAnchor
-            //            let bottom = isPortrait ? view.safeAreaLayoutGuide.bottomAnchor : view.bottomAnchor
+            //            let safeArea = view.safeAreaInsets
             //
-            //            analyticsView.removeAllConstraints()
             //
-            //            NSLayoutConstraint.activate([
-            //                analyticsView.leadingAnchor.constraint(equalTo:  leading),
-            //                analyticsView.trailingAnchor.constraint(equalTo: trailing),
-            //                analyticsView.topAnchor.constraint(equalTo:      top),
-            //                analyticsView.bottomAnchor.constraint(equalTo:   bottom)
-            //            ])
+            //            let leftConstant    = isPortrait ? 0 : safeArea.left
+            //            let rightConstant   = isPortrait ? 0 : safeArea.right
+            //            let topConstant     = isPortrait ? safeArea.top : 0
+            //            let bottomConstant  = isPortrait ? safeArea.bottom : 0
             //
+            //            leftConstraint.constant   = leftConstant
+            //            rightConstraint.constant  = rightConstant
+            //            topConstraint.constant    = topConstant
+            //            bottomConstraint.constant = bottomConstant
+            
             //            view.layoutIfNeeded()
+            
+            let leading = isPortrait ? view.leadingAnchor : view.safeAreaLayoutGuide.leadingAnchor
+            let trailing = isPortrait ? view.trailingAnchor : view.safeAreaLayoutGuide.trailingAnchor
+            let top = isPortrait ? view.safeAreaLayoutGuide.topAnchor : view.topAnchor
+            let bottom = isPortrait ? view.safeAreaLayoutGuide.bottomAnchor : view.bottomAnchor
+            
+            NSLayoutConstraint.deactivate(analyticsView.constraints)
+            
+            NSLayoutConstraint.activate([
+                analyticsView.leadingAnchor.constraint(equalTo:  leading),
+                analyticsView.trailingAnchor.constraint(equalTo: trailing),
+                analyticsView.topAnchor.constraint(equalTo:      top),
+                analyticsView.bottomAnchor.constraint(equalTo:   bottom)
+            ])
+            
+            view.setNeedsDisplay()
         }
     }
     
