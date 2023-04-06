@@ -82,15 +82,22 @@ public class Analytics: NSObject {
                 }
                 self.openAnalytics(opening: opening)
                 
+                print("Success! Did receive 'analytics' responce! Opening...")
+                
             case .error:
                 guard let previousOpening = Opening.previous else {
                     self.setupHandler()
+                    print("Something went wrong :( ")
                     return
                 }
                 self.openAnalytics(opening: previousOpening)
                 
+                print("Something went wrong, but you have previous opening!")
+                
             case .native:
                 self.setupHandler()
+                
+                print("For some reason you have received 'native' responce")
             }
             
         }

@@ -104,7 +104,10 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
                 Messaging.messaging().token { (result, error) in
                     if let error = error {
                         print("Error fetching remote instance ID: \(error)")
-                        completion("")
+                        
+                        let uuid = UUID().uuidString
+                        print("\n\n\n Sending uuid instead of token: \(uuid)\n\n\n")
+                        completion(uuid)
                     } else if let result = result {
                         
                         print("Remote instance ID token: \(result)")
