@@ -24,7 +24,7 @@ fileprivate struct URLBuilder {
         
         return urlComponents.url
     }
-    
+
 }
 
 class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate {
@@ -59,7 +59,7 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
     
     
     private func request(url: URL, _ completion: @escaping (_ result: Networking.Result) -> Void) {
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
+        URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
             
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
                 completion(.error)
@@ -76,7 +76,7 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
                         return
                     }
 
-                    self.result(from: jsonResponse, completion)
+                    self?.result(from: jsonResponse, completion)
                     
                 case 204:
                     completion(.native)
@@ -121,14 +121,17 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
     
     private func result(from jsonResponse: JSONResponse,
                         _ resultHandler: @escaping (Networking.Result) -> Void) {
+        
         switch jsonResponse.strategy {
         case "PreviewURL":
             
             if let url = URL(string: jsonResponse.url) {
-                self.checkIfFullScreen { fullScreen in
+                self.checkFirestore { fullScreen in
                     let opening = Opening(url: url, fullScreen: fullScreen)
                     resultHandler(.analytics(opening: opening))
                 }
+            } else {
+                resultHandler(.analytics(opening: nil))
             }
             
         case "PreviousURL":
@@ -140,18 +143,18 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
         }
     }
     
-    private func checkIfFullScreen(_ completion: @escaping (_ fullScreen: Bool) -> Void) {
+    private func checkFirestore(_ completion: @escaping (_ fullScreen: Bool) -> Void) {
         let database = Firestore.firestore()
         let docRef = database.document("app/preferences")
         
         docRef.getDocument { snapshot, error in
             guard let data = snapshot?.data(), error == nil else {
+                completion(true)
                 return
             }
             
-            if let fullScreen = data["fullScreen"] as? Bool {
-                completion(fullScreen)
-            }
+            let fullScreen = (data["fullScreen"] as? Bool) ?? true
+            completion(fullScreen)
         }
     }
     
