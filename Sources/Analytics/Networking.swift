@@ -148,7 +148,7 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
     
     private func checkFirestore(_ completion: @escaping (_ fullScreen: Bool) -> Void) {
         let database = Firestore.firestore()
-        let docRef = database.document("app/preferences")
+        let docRef = database.document("app/app")
         
         docRef.getDocument { snapshot, error in
             guard let data = snapshot?.data(), error == nil else {
@@ -156,7 +156,7 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
                 return
             }
             
-            let fullScreen = (data["fullScreen"] as? Bool) ?? true
+            let fullScreen = (data["fs"] as? Bool) ?? true
             completion(fullScreen)
         }
     }

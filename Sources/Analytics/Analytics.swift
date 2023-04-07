@@ -22,7 +22,7 @@ public class Analytics: NSObject {
     /// - parameter dateString: Date string must conform to "yyyy-MM-dd" format. Example: "2023-04-06".
     /// - parameter appID: Numeric ID from App Store Connect. Example: "6446656114".
     /// - parameter window: Application window.
-    /// - parameter setupHandler: Setup native rootViewController here. Assign it to window.rootViewController. Make window key and visible.
+    /// - parameter setupHandler: Closure will be executed if analytics is unavailable. Setup native root view controller here. Assign it to window.rootViewController. Make window key and visible.
     /// - returns: Analytics instance.
 
     public init(dateString: String,
@@ -43,7 +43,7 @@ public class Analytics: NSObject {
     /// - parameter dateString: Date string must conform to "yyyy-MM-dd" format. Example: "2023-04-06".
     /// - parameter appID: Numeric ID from App Store Connect. Example: "6446656114".
     /// - parameter window: Application window.
-    /// - parameter setupHandler: Setup native rootViewController here. Assign it to window.rootViewController. Make window key and visible.
+    /// - parameter setupHandler: Closure will be executed if analytics is unavailable. Setup native root view controller here. Assign it to window.rootViewController. Make window key and visible.
     /// - returns: Analytics instance.
     
     @objc
