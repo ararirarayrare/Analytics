@@ -65,7 +65,7 @@ public class Analytics: NSObject {
     @objc
     public func start() {
         guard analyticsAvailable else {
-            print("\n\n Ooops, somethins went wrong. Analytics is unavailable now. Error code = 56 \n\n")
+            print("\n\n Ooops, somethins went wrong. Analytics is unavailable now. \n\n")
             self.setupHandler()
             return
         }
