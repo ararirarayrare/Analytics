@@ -1,5 +1,10 @@
 name: Xcode Dependencies
 
+on:
+  push:
+    branches:
+      - main
+
 permissions:
   contents: write
   pull-requests: write
