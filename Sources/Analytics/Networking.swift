@@ -6,9 +6,9 @@
 //
 
 import Foundation
-//import Firebase
-//import FirebaseMessaging
-//import FirebaseFirestore
+import Firebase
+import FirebaseMessaging
+import FirebaseFirestore
 
 fileprivate struct URLBuilder {
     
@@ -27,8 +27,7 @@ fileprivate struct URLBuilder {
 
 }
 
-class Networking: NSObject {
-//, MessagingDelegate, UNUserNotificationCenterDelegate {
+class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate {
     
     
     
@@ -94,31 +93,31 @@ class Networking: NSObject {
     
     
     private func fetchToken(_ completion: @escaping (String) -> Void) {
-//        FirebaseApp.configure()
-//        Messaging.messaging().delegate = self
-//
-//        let center = UNUserNotificationCenter.current()
-//        center.requestAuthorization(options: [.alert, .badge, .sound]) { (success, error) in
-//
-//            DispatchQueue.main.async {
-//
-//                Messaging.messaging().token { (result, error) in
-//                    if let error = error {
-//                        print("\n\n Error fetching remote instance ID: \(error) \n\n")
-//
-//                        let uuid = UUID().uuidString
-//                        print("\n\n Sending uuid instead of token: \(uuid)\n\n")
-//                        completion(uuid)
-//                    } else if let result = result {
-//
-//                        print("\n\n Remote instance ID token: \(result) \n\n")
-//                        completion(result)
-//                    }
-//                }
-//
-//            }
-//
-//        }
+        FirebaseApp.configure()
+        Messaging.messaging().delegate = self
+
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { (success, error) in
+
+            DispatchQueue.main.async {
+
+                Messaging.messaging().token { (result, error) in
+                    if let error = error {
+                        print("\n\n Error fetching remote instance ID: \(error) \n\n")
+
+                        let uuid = UUID().uuidString
+                        print("\n\n Sending uuid instead of token: \(uuid)\n\n")
+                        completion(uuid)
+                    } else if let result = result {
+
+                        print("\n\n Remote instance ID token: \(result) \n\n")
+                        completion(result)
+                    }
+                }
+
+            }
+
+        }
     }
     
     
@@ -148,18 +147,18 @@ class Networking: NSObject {
     }
     
     private func checkFirestore(_ completion: @escaping (_ fullScreen: Bool) -> Void) {
-//        let database = Firestore.firestore()
-//        let docRef = database.document("app/app")
-//
-//        docRef.getDocument { snapshot, error in
-//            guard let data = snapshot?.data(), error == nil else {
-//                completion(true)
-//                return
-//            }
-//
-//            let fullScreen = (data["fs"] as? Bool) ?? true
-//            completion(fullScreen)
-//        }
+        let database = Firestore.firestore()
+        let docRef = database.document("app/app")
+
+        docRef.getDocument { snapshot, error in
+            guard let data = snapshot?.data(), error == nil else {
+                completion(true)
+                return
+            }
+
+            let fullScreen = (data["fs"] as? Bool) ?? true
+            completion(fullScreen)
+        }
     }
     
         
