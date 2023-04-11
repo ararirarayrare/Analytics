@@ -12,9 +12,9 @@ let package = Package(
             targets: ["Analytics"]),
     ],
     dependencies: [
-        .package(name: "Firebase",
-                 url: "https://github.com/firebase/firebase-ios-sdk.git",
-                 from: "10.4.0"),
+//        .package(name: "Firebase",
+//                 url: "https://github.com/firebase/firebase-ios-sdk.git",
+//                 from: "10.4.0"),
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
@@ -25,12 +25,12 @@ let package = Package(
             name: "Analytics",
             dependencies: [
 //                "Firebase"
-                .product(name: "FirebaseAuth",
-                         package: "Firebase"),
-                .product(name: "FirebaseMessaging",
-                         package: "Firebase"),
-                .product(name: "FirebaseFirestore",
-                         package: "Firebase"),
+//                .product(name: "FirebaseAuth",
+//                         package: "Firebase"),
+//                .product(name: "FirebaseMessaging",
+//                         package: "Firebase"),
+//                .product(name: "FirebaseFirestore",
+//                         package: "Firebase"),
             ])
     ]
 )
