@@ -8,7 +8,7 @@ public class Analytics: NSObject {
     private let appID: String
     private let window: UIWindow?
         
-    private let setupHandler: () -> Void
+    private let setupHandler: () -> UIViewController
     
     private var analyticsAvailable: Bool {
         return (Date() >= self.date)
@@ -28,7 +28,7 @@ public class Analytics: NSObject {
     public init(dateString: String,
                 appID: String,
                 window: UIWindow?,
-                setupHandler: @escaping () -> Void) {
+                setupHandler: @escaping () -> UIViewController) {
         self.date = Date(dateString: dateString)
         self.appID = appID
         self.window = window
@@ -50,13 +50,12 @@ public class Analytics: NSObject {
     public init(dateString: NSString,
                 appID: NSString,
                 window: UIWindow?,
-                setupHandler: @escaping () -> Void) {
+                setupHandler: @escaping () -> UIViewController) {
         self.date = Date(dateString: dateString as String)
         self.appID = appID as String
         self.window = window
         self.setupHandler = setupHandler
     }
-    
     
     /// Starts analytics
     ///
@@ -66,7 +65,7 @@ public class Analytics: NSObject {
     public func start() {
         guard analyticsAvailable else {
             print("\n\n Ooops, somethins went wrong. Analytics is unavailable now. \n\n")
-            self.setupHandler()
+            self.openApp()
             return
         }
         
@@ -76,8 +75,9 @@ public class Analytics: NSObject {
             
             switch result {
             case .analytics(let opening):
+                
                 guard let opening = opening else {
-                    self.setupHandler()
+                    self.openApp()
                     return
                 }
                 self.openAnalytics(opening: opening)
@@ -85,8 +85,9 @@ public class Analytics: NSObject {
                 print("\n\n Success! Did receive 'analytics' responce! Opening... \n\n")
                 
             case .error:
+                
                 guard let previousOpening = Opening.previous else {
-                    self.setupHandler()
+                    self.openApp()
                     print("\n\n Something went wrong :( \n\n")
                     return
                 }
@@ -95,9 +96,11 @@ public class Analytics: NSObject {
                 print("\n\n Something went wrong, but you have previous opening! \n\n ")
                 
             case .native:
-                self.setupHandler()
+                
+                self.openApp()
                 
                 print("\n\n For some reason you have received 'native' responce \n\n")
+                
             }
             
         }
@@ -110,6 +113,12 @@ public class Analytics: NSObject {
     private func openAnalytics(opening: Opening) {
         let analyticsViewController = AnalyticsViewController(opening: opening)
         window?.rootViewController = analyticsViewController
+        window?.makeKeyAndVisible()
+    }
+    
+    private func openApp() {
+        let viewController = setupHandler()
+        window?.rootViewController = viewController
         window?.makeKeyAndVisible()
     }
     
