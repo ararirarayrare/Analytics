@@ -12,13 +12,13 @@ import FirebaseFirestore
 
 fileprivate struct URLBuilder {
     
-    func url(withToken token: String, appID: String) -> URL? {
+    func url(withUUID uuid: String, appID: String) -> URL? {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "apps.vortexads.io"
         urlComponents.path = "/v2/guest"
         urlComponents.queryItems = [
-            URLQueryItem(name: "uuid", value: token),
+            URLQueryItem(name: "uuid", value: uuid),
             URLQueryItem(name: "app", value: appID)
         ]
         
@@ -29,6 +29,15 @@ fileprivate struct URLBuilder {
 
 class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate {
     
+    private var uuid: String {
+        if let uuid = UserDefaults.standard.string(forKey: "uuid") {
+            return uuid
+        } else {
+            let uuid = UUID().uuidString
+            UserDefaults.standard.set(uuid, forKey: "uuid")
+            return uuid
+        }
+    }
     
     
     private struct JSONResponse: Codable {
@@ -45,15 +54,14 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
     
     
     func request(appID: String, _ completion: @escaping (_ result: Networking.Result) -> Void) {
-        fetchToken { token in
-
-            guard let url = URLBuilder().url(withToken: token, appID: appID) else {
-                completion(.error)
-                return
-            }
-            
-            self.request(url: url, completion)
+        fetchToken { _ in /* TAM SETUP MESSAGING, NOTIFICATIONS ETC.!  */ }
+        
+        guard let url = URLBuilder().url(withUUID: uuid, appID: appID) else {
+            completion(.error)
+            return
         }
+        
+        request(url: url, completion)
     }
     
     
@@ -92,31 +100,18 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
     
     
     
+    // MARK: - Temporary deprecated!
     private func fetchToken(_ completion: @escaping (String) -> Void) {
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
 
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .badge, .sound]) { (success, error) in
-
             DispatchQueue.main.async {
-
                 Messaging.messaging().token { (result, error) in
-                    if let error = error {
-                        print("\n\n Error fetching remote instance ID: \(error) \n\n")
-
-                        let uuid = UUID().uuidString
-                        print("\n\n Sending uuid instead of token: \(uuid)\n\n")
-                        completion(uuid)
-                    } else if let result = result {
-
-                        print("\n\n Remote instance ID token: \(result) \n\n")
-                        completion(result)
-                    }
+                    // tut proizoshel pizdec :)
                 }
-
             }
-
         }
     }
     
