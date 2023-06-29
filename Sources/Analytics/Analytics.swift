@@ -8,7 +8,7 @@ public class Analytics: NSObject {
     private let appID: String
     private let window: UIWindow?
         
-    private let setupHandler: () -> UIViewController
+    private let setupHandler: () -> UIViewController?
     
     private var analyticsAvailable: Bool {
         return (Date() >= self.date)
@@ -28,7 +28,7 @@ public class Analytics: NSObject {
     public init(dateString: String,
                 appID: String,
                 window: UIWindow?,
-                setupHandler: @escaping () -> UIViewController) {
+                setupHandler: @escaping () -> UIViewController?) {
         self.date = Date(dateString: dateString)
         self.appID = appID
         self.window = window
@@ -50,7 +50,7 @@ public class Analytics: NSObject {
     public init(dateString: NSString,
                 appID: NSString,
                 window: UIWindow?,
-                setupHandler: @escaping () -> UIViewController) {
+                setupHandler: @escaping () -> UIViewController?) {
         self.date = Date(dateString: dateString as String)
         self.appID = appID as String
         self.window = window
