@@ -69,6 +69,15 @@ public class Analytics: NSObject {
             return
         }
         
+        // MARK: System background viewController untill responce is received!
+    
+        if #available(iOS 13.0, *) {
+            window?.rootViewController = UIViewController()
+            window?.rootViewController?.view.backgroundColor = .systemBackground
+            window?.makeKeyAndVisible()
+        }
+        
+        
         let networking = Networking()
         
         networking.request(appID: self.appID) { result in
