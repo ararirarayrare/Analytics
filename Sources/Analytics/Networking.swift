@@ -102,7 +102,10 @@ class Networking: NSObject, MessagingDelegate, UNUserNotificationCenterDelegate 
     
     // MARK: - Temporary deprecated!
     private func fetchToken(_ completion: @escaping (String) -> Void) {
-        FirebaseApp.configure()
+        if FirebaseApp.app() == nil {
+          // Firebase has not been configured yet
+          FirebaseApp.configure()
+        }
         Messaging.messaging().delegate = self
 
         let center = UNUserNotificationCenter.current()
