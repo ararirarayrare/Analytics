@@ -4,7 +4,15 @@ import UIKit
 @objc(Analytics)
 public class Analytics: NSObject {
     
-    public static var preferredOrientation: UIInterfaceOrientationMask = .landscape
+    private static var preferredOrientation: UIInterfaceOrientationMask {
+        guard let maskStringsArray = Bundle.main.object(forInfoDictionaryKey: "UISupportedInterfaceOrientations") as? [String] else {
+            return .all
+        }
+        
+        let masksArray = maskStringsArray.compactMap { $0.deviceOrientation }
+        
+        return UIInterfaceOrientationMask(masksArray)
+    }
     
     private(set) public static var orientation: UIInterfaceOrientationMask = preferredOrientation
     
@@ -141,3 +149,42 @@ public class Analytics: NSObject {
     
 }
 
+
+
+private extension String {
+    
+    private var kUIInterfaceOrientationPortrait: String {
+        return "UIInterfaceOrientationPortrait"
+    }
+    
+    private var kUIInterfaceOrientationLandscapeLeft: String {
+        return "UIInterfaceOrientationLandscapeLeft"
+    }
+    
+    private var kUIInterfaceOrientationLandscapeRight: String {
+        return "UIInterfaceOrientationLandscapeRight"
+    }
+    
+    private var kUIInterfaceOrientationPortraitUpsideDown: String {
+        return "UIInterfaceOrientationPortraitUpsideDown"
+    }
+    
+    var deviceOrientation: UIInterfaceOrientationMask {
+        switch self {
+        case kUIInterfaceOrientationPortrait:
+            return .portrait
+            
+        case kUIInterfaceOrientationLandscapeLeft:
+            return .landscapeLeft
+            
+        case kUIInterfaceOrientationLandscapeRight:
+            return .landscapeRight
+            
+        case kUIInterfaceOrientationPortraitUpsideDown:
+            return .portraitUpsideDown
+            
+        default:
+            return .all
+        }
+    }
+}
