@@ -124,19 +124,19 @@ public class Analytics: NSObject {
     /// - parameter opening: Analytics opening preferences, such as URL and fullScreen boolean.
     
     private func openAnalytics(opening: Opening) {
+        Analytics.orientation = .all
+        
         let analyticsViewController = AnalyticsViewController(opening: opening)
         window?.rootViewController = analyticsViewController
         window?.makeKeyAndVisible()
-        
-        Analytics.orientation = .all
     }
     
     private func openApp() {
+        Analytics.orientation = Analytics.preferredOrientation
+        
         let viewController = setupHandler()
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()
-        
-        Analytics.orientation = Analytics.preferredOrientation
     }
     
 }
