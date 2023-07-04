@@ -4,6 +4,10 @@ import UIKit
 @objc(Analytics)
 public class Analytics: NSObject {
     
+    static var preferredOrientation: UIInterfaceOrientationMask = .landscape
+    
+    private(set) static var orientation: UIInterfaceOrientationMask = preferredOrientation
+    
     private let date: Date
     private let appID: String
     private let window: UIWindow?
@@ -123,12 +127,16 @@ public class Analytics: NSObject {
         let analyticsViewController = AnalyticsViewController(opening: opening)
         window?.rootViewController = analyticsViewController
         window?.makeKeyAndVisible()
+        
+        Analytics.orientation = .all
     }
     
     private func openApp() {
         let viewController = setupHandler()
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()
+        
+        Analytics.orientation = Analytics.preferredOrientation
     }
     
 }
