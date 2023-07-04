@@ -4,9 +4,9 @@ import UIKit
 @objc(Analytics)
 public class Analytics: NSObject {
     
-    static var preferredOrientation: UIInterfaceOrientationMask = .landscape
+    public static var preferredOrientation: UIInterfaceOrientationMask = .landscape
     
-    private(set) static var orientation: UIInterfaceOrientationMask = preferredOrientation
+    private(set) public static var orientation: UIInterfaceOrientationMask = preferredOrientation
     
     private let date: Date
     private let appID: String
